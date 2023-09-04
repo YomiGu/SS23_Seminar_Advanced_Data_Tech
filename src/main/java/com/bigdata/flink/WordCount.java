@@ -14,6 +14,7 @@ public class WordCount {
 
     public static void main(String[] args) throws Exception {
 
+
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
 //        DataStream<Tuple2<String, Integer>> dataStream = env
@@ -24,7 +25,8 @@ public class WordCount {
 //                .sum(1);
 
         // 1. 创建数据源
-        DataStreamSource<String> stringDataStreamSource = env.socketTextStream("192.168.229.101", 8888);
+        DataStreamSource<String> stringDataStreamSource = env.socketTextStream("192.168.229.101", 9999);
+        //DataStreamSource<String> stringDataStreamSource = env.socketTextStream("172.19.0.3", 8081);
         stringDataStreamSource.print("source");
         // 2. 处理数据
         SingleOutputStreamOperator<Tuple2<String, Integer>> tuple2SingleOutputStreamOperator = stringDataStreamSource.flatMap(new Splitter());

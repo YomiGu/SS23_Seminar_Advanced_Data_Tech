@@ -28,8 +28,8 @@ public class TableTest {
 
         StreamTableEnvironment streamTableEnv = StreamTableEnvironment.create(env, settings);
 
-        DataStreamSource<String> socketStream = env.socketTextStream("192.168.229.101", 8888);
-
+        DataStreamSource<String> socketStream = env.socketTextStream("192.168.229.101", 9999);
+        //DataStreamSource<String> socketStream = env.socketTextStream("172.19.0.3", 8081);
         SingleOutputStreamOperator<Tuple3<String, String, Long>> datas = socketStream.flatMap(new FlatMapFunction<String, Tuple3<String, String, Long>>() {
             @Override
             public void flatMap(String s, Collector<Tuple3<String, String, Long>> collector) throws Exception {
