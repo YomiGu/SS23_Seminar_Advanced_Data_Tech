@@ -9,13 +9,13 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
 
-public class Parallelism {
+public class parallelism_test {
     public static void main(String[] args) throws Exception {
         Configuration configuration = new Configuration();
-        configuration.setInteger("taskmanager.numberOfTaskSlots",4);
+        configuration.setInteger("taskmanager.numberOfTaskSlots",2);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
         env.setStreamTimeCharacteristic(TimeCharacteristic.EventTime);
-        // 1. Create Date Source
+        // 1. Create a data source
         DataStreamSource<String> stringDataStreamSource = env.socketTextStream("192.168.229.101", 9999).setParallelism(1);
         DataStream<Tuple2<String, Integer>> resultStream = stringDataStreamSource.flatMap(new FlatMapFunction<String,Tuple2<String,Integer>>() {
                     @Override
@@ -26,10 +26,13 @@ public class Parallelism {
                         }
                     }
                 }).setParallelism(1).slotSharingGroup("green")
-                //Source&group
                 .keyBy(0)
-                .sum(1).setParallelism(2).slotSharingGroup("red"); //keyBy()
+                .sum(1).setParallelism(1).slotSharingGroup("red");
+
         resultStream.print().setParallelism(1);
         env.execute();
     }
 }
+
+
+

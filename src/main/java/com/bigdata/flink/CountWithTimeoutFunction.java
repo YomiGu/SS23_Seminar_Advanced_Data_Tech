@@ -36,7 +36,8 @@ public class CountWithTimeoutFunction extends KeyedProcessFunction<String, Tuple
         // write the state back
         state.update(current);
 
-        // schedule the next timer 60 seconds from the current event time
+        // schedule the next timer 60 seconds from the current event time,
+        // the lastModified number is more 600000 than the first timestamp,than the time is run out and the watermark is triggered
         context.timerService().registerEventTimeTimer(current.lastModified + 60000);
     }
 
